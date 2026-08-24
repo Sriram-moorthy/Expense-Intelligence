@@ -12,7 +12,11 @@ def test_openapi_docs_available(client: TestClient) -> None:
     assert response.status_code == 200
 
 
-def test_openapi_schema_includes_health(client: TestClient) -> None:
+def test_openapi_schema_includes_health_and_auth(client: TestClient) -> None:
     response = client.get("/openapi.json")
     assert response.status_code == 200
-    assert "/health" in response.json()["paths"]
+    paths = response.json()["paths"]
+    assert "/health" in paths
+    assert "/api/v1/auth/register" in paths
+    assert "/api/v1/auth/login" in paths
+    assert "/api/v1/auth/me" in paths

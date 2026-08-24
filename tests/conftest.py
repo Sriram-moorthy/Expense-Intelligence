@@ -14,9 +14,9 @@ if not os.environ.get("TEST_DATABASE_URL"):
     raise RuntimeError(_MISSING_TEST_DATABASE_URL)
 
 os.environ["DATABASE_URL"] = os.environ["TEST_DATABASE_URL"]
+os.environ.setdefault("JWT_SECRET", "test-jwt-secret-not-for-production")
 
 from app.main import app  # noqa: E402
-
 
 @pytest.fixture
 def client() -> TestClient:

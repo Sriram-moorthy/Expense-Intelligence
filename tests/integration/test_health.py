@@ -12,7 +12,7 @@ def test_openapi_docs_available(client: TestClient) -> None:
     assert response.status_code == 200
 
 
-def test_openapi_schema_includes_health_and_auth(client: TestClient) -> None:
+def test_openapi_schema_includes_v1_paths(client: TestClient) -> None:
     response = client.get("/openapi.json")
     assert response.status_code == 200
     paths = response.json()["paths"]
@@ -20,3 +20,27 @@ def test_openapi_schema_includes_health_and_auth(client: TestClient) -> None:
     assert "/api/v1/auth/register" in paths
     assert "/api/v1/auth/login" in paths
     assert "/api/v1/auth/me" in paths
+
+    assert "/api/v1/categories" in paths
+    assert "/api/v1/categories/{category_id}" in paths
+    assert "post" in paths["/api/v1/categories"]
+    assert "get" in paths["/api/v1/categories"]
+    assert "get" in paths["/api/v1/categories/{category_id}"]
+    assert "put" in paths["/api/v1/categories/{category_id}"]
+    assert "delete" in paths["/api/v1/categories/{category_id}"]
+
+    assert "/api/v1/transactions" in paths
+    assert "/api/v1/transactions/{transaction_id}" in paths
+    assert "post" in paths["/api/v1/transactions"]
+    assert "get" in paths["/api/v1/transactions"]
+    assert "get" in paths["/api/v1/transactions/{transaction_id}"]
+    assert "put" in paths["/api/v1/transactions/{transaction_id}"]
+    assert "delete" in paths["/api/v1/transactions/{transaction_id}"]
+
+    assert "/api/v1/budgets" in paths
+    assert "/api/v1/budgets/{budget_id}" in paths
+    assert "post" in paths["/api/v1/budgets"]
+    assert "get" in paths["/api/v1/budgets"]
+    assert "get" in paths["/api/v1/budgets/{budget_id}"]
+    assert "put" in paths["/api/v1/budgets/{budget_id}"]
+    assert "delete" in paths["/api/v1/budgets/{budget_id}"]

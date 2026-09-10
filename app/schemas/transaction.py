@@ -53,3 +53,11 @@ class TransactionResponse(BaseModel):
     transaction_date: date
     created_at: datetime
     updated_at: datetime
+
+
+class TransactionListResponse(BaseModel):
+    items: list[TransactionResponse]
+    page: int
+    page_size: int
+    total: int
+    pages: int

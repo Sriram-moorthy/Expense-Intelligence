@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.core.exceptions import (
     CATEGORY_NOT_FOUND,
+    INVALID_DATE_RANGE,
     TRANSACTION_NOT_FOUND,
     TRANSACTION_TYPE_MISMATCH,
     AppError,
@@ -48,8 +49,38 @@ class TransactionService:
             raise AppError(404, CATEGORY_NOT_FOUND, "Category not found") from None
         return transaction
 
-    def list_for_user(self, user_id: int) -> list[Transaction]:
-        return self.transactions.get_all_for_user(user_id)
+    def list_for_user(
+        self,
+        user_id: int,
+        *,
+        transaction_type: str | None,
+        category_id: int | None,
+        start_date: date | None,
+        end_date: date | None,
+        sort_by: str,
+        sort_order: str,
+        page: int,
+        page_size: int,
+    ) -> tuple[list[Transaction], int, int]:
+        if start_date is not None and end_date is not None and start_date > end_date:
+            raise AppError(
+                422,
+                INVALID_DATE_RANGE,
+                "start_date must be less than or equal to end_date",
+            )
+        items, total = self.transactions.list_for_user(
+            user_id,
+            transaction_type=transaction_type,
+            category_id=category_id,
+            start_date=start_date,
+            end_date=end_date,
+            sort_by=sort_by,
+            sort_order=sort_order,
+            page=page,
+            page_size=page_size,
+        )
+        pages = (total + page_size - 1) // page_size if total else 0
+        return items, total, pages
 
     def get_for_user(self, user_id: int, transaction_id: int) -> Transaction:
         return self._owned_transaction(user_id, transaction_id)

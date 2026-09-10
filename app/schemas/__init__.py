@@ -1,3 +1,9 @@
+from app.schemas.analytics import (
+    AnalyticsSummaryResponse,
+    BudgetAnalyticsResponse,
+    CategoryAnalyticsResponse,
+    TrendsResponse,
+)
 from app.schemas.auth import (
     LoginRequest,
     RegisterRequest,
@@ -9,14 +15,18 @@ from app.schemas.category import CategoryCreate, CategoryResponse, CategoryUpdat
 from app.schemas.health import HealthResponse
 from app.schemas.transaction import (
     TransactionCreate,
+    TransactionListResponse,
     TransactionResponse,
     TransactionUpdate,
 )
 
 __all__ = [
+    "AnalyticsSummaryResponse",
+    "BudgetAnalyticsResponse",
     "BudgetCreate",
     "BudgetResponse",
     "BudgetUpdate",
+    "CategoryAnalyticsResponse",
     "CategoryCreate",
     "CategoryResponse",
     "CategoryUpdate",
@@ -25,7 +35,9 @@ __all__ = [
     "RegisterRequest",
     "TokenResponse",
     "TransactionCreate",
+    "TransactionListResponse",
     "TransactionResponse",
     "TransactionUpdate",
+    "TrendsResponse",
     "UserResponse",
 ]

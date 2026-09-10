@@ -33,6 +33,20 @@ def test_openapi_schema_includes_v1_paths(client: TestClient) -> None:
     assert "/api/v1/transactions/{transaction_id}" in paths
     assert "post" in paths["/api/v1/transactions"]
     assert "get" in paths["/api/v1/transactions"]
+    list_params = {
+        param["name"]
+        for param in paths["/api/v1/transactions"]["get"].get("parameters", [])
+    }
+    assert {
+        "type",
+        "category_id",
+        "start_date",
+        "end_date",
+        "sort_by",
+        "sort_order",
+        "page",
+        "page_size",
+    }.issubset(list_params)
     assert "get" in paths["/api/v1/transactions/{transaction_id}"]
     assert "put" in paths["/api/v1/transactions/{transaction_id}"]
     assert "delete" in paths["/api/v1/transactions/{transaction_id}"]
@@ -44,3 +58,12 @@ def test_openapi_schema_includes_v1_paths(client: TestClient) -> None:
     assert "get" in paths["/api/v1/budgets/{budget_id}"]
     assert "put" in paths["/api/v1/budgets/{budget_id}"]
     assert "delete" in paths["/api/v1/budgets/{budget_id}"]
+
+    assert "/api/v1/analytics/summary" in paths
+    assert "/api/v1/analytics/categories" in paths
+    assert "/api/v1/analytics/trends" in paths
+    assert "/api/v1/analytics/budgets" in paths
+    assert "get" in paths["/api/v1/analytics/summary"]
+    assert "get" in paths["/api/v1/analytics/categories"]
+    assert "get" in paths["/api/v1/analytics/trends"]
+    assert "get" in paths["/api/v1/analytics/budgets"]

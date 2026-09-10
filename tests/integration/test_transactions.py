@@ -110,10 +110,10 @@ def test_list_returns_only_own_transactions(client: TestClient) -> None:
     assert created_b.status_code == 201
     listed = client.get(TRANSACTIONS_URL, headers=_auth_header(token_a))
     assert listed.status_code == 200
-    assert [item["description"] for item in listed.json()] == ["A"]
-    assert all(
-        item["user_id"] == created_a.json()["user_id"] for item in listed.json()
-    )
+    body = listed.json()
+    assert [item["description"] for item in body["items"]] == ["A"]
+    assert all(item["user_id"] == created_a.json()["user_id"] for item in body["items"])
+    assert body["total"] == 1
 
 
 def test_retrieve_own_transaction(client: TestClient) -> None:
